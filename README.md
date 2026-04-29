@@ -47,11 +47,11 @@ Once both VMs are created, we're ready to start setting everything up.
 
 ### Step 3 - Configuring the Domain Controller
 
-Once the Domain Controller VM is created, we need to set its private IP address to be static. To do this, you will navigate to the Virtual Machines menu and click on the Domain Controller VM. Click **Networking > Network Settings** on the sidebar, and then click the NIC at the top of the screen. 
+Once the Domain Controller VM is created, we will need to set its private IP address to be static. This will allow us to use the Domain Controller as the DNS server for the Client. To do this, you will navigate to the Virtual Machines menu and click on the Domain Controller VM. Click **Networking > Network Settings** on the sidebar, and then click the **NIC at the top of the screen**. 
 
 <img width="804" height="520" alt="Screenshot 2026-04-28 at 9 17 02 PM" src="https://github.com/user-attachments/assets/34b3aae7-7eef-4eed-ad82-64214f86b9ba" />
 
-From here, click **ipconfig1**, and then change the Private IP address settings to **Static** and save.
+From here, click **ipconfig1**, and then change the Private IP address settings to **Static** and save. ***Take note of the Private IP address, as later we will need it when setting up the Domain Controller as the Client's DNS server.***
 
 <img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 20 23 PM" src="https://github.com/user-attachments/assets/39d6a4a7-5f9a-4fdc-bd0a-8e1bd89d99b1" />
 
@@ -67,6 +67,23 @@ Now we need to RDP into the Domain Controller using a RDP client. Here are a few
 #### Linux
 - Remmina
 - Rustdesk
+
+Using your preferred client, RDP into the Domain Controller using the username and password you assigned to it. You can find the IP needed to RDP in by examining the Domain Controller in the Virtual Machines menu.
+
+<img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 33 38 PM" src="https://github.com/user-attachments/assets/115a945b-24f0-4888-a989-4e6027a63ecb" />
+
+Once connected, our first order of business is to disable the Windows Firewall. Right-click the start menu and then click **Run**. Run **wf.msc** to bring up the Windows Firewall menu. Click **Windows Defender Firewall Properties** and then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**.
+
+<img width="1491" height="813" alt="Screenshot 2026-04-28 at 9 42 37 PM" src="https://github.com/user-attachments/assets/d7e576ee-04b5-487b-93d5-e3a3273ffcf6" />.
+
+### Step 4: Configuring the Client's DNS Settings
+Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server.
+
+Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click save.
+
+
+
+
 
   
 
