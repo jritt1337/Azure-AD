@@ -89,9 +89,20 @@ After this, we will need to restart the Client VM so that the settings apply. Go
 
 After the restart, we will RDP into the client VM to ensure everything is setup correctly and that the connection between the Domain Controller and Client is recognized.
 
-Once logged into the client, open **Windows Powershell** and type "ping (insert DC private IP address here)" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the firewall is up, the pings will be blocked.
+Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the firewall is up, the pings will be blocked. 
 
+**Ping Success**
 <img width="645" height="623" alt="Screenshot 2026-04-30 at 8 59 51 AM" src="https://github.com/user-attachments/assets/2c61ff8a-0303-4d3a-b8d0-b5466499ac2e" />
+
+
+**Ping Failure**
+<img width="645" height="623" alt="Screenshot 2026-04-30 at 9 08 59 AM" src="https://github.com/user-attachments/assets/4a7ff49a-6e43-4bd8-ab32-d5d41ccdc587" />
+
+Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address. If not, there's your issue.
+<img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
+
+
+
 
 
 
