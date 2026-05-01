@@ -92,14 +92,49 @@ After the restart, we will RDP into the client VM to ensure everything is setup 
 Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the firewall is up, the pings will be blocked. 
 
 **Ping Success**
+
 <img width="645" height="623" alt="Screenshot 2026-04-30 at 8 59 51 AM" src="https://github.com/user-attachments/assets/2c61ff8a-0303-4d3a-b8d0-b5466499ac2e" />
 
 
 **Ping Failure**
+
 <img width="645" height="623" alt="Screenshot 2026-04-30 at 9 08 59 AM" src="https://github.com/user-attachments/assets/4a7ff49a-6e43-4bd8-ab32-d5d41ccdc587" />
 
-Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address. If not, there's your issue.
+Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address.
+
 <img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
+
+### Step 5: Installing Active Directory on the Domain Controller
+On the Domain Controller, open up the Server Manager. It should be opened by default, but if not, you can find it within the Start Menu.
+
+In the Server Manager, click **"Add Roles and Features"**.
+
+<img width="931" height="395" alt="Screenshot 2026-04-30 at 10 22 10 PM" src="https://github.com/user-attachments/assets/3566b7de-153d-433c-87ff-3c5d617a7ac0" />
+
+You can click Next on the next few screens, make sure the appropriate server is selected when at the "Server Selection" step, and when you get to "Server Roles" click **Active Directory Domain Services** and click the "Add Features" button on the pop-up that follows.
+
+<img width="905" height="518" alt="Screenshot 2026-04-30 at 10 23 49 PM" src="https://github.com/user-attachments/assets/9b095bc3-97e0-4416-8dd0-f23088b5256c" />
+
+Feel free to click through the next few steps, until the confirmation. There you will check the box next to **"Restart the destination server automatically if required"**, then click **"Install"**
+
+<img width="783" height="556" alt="Screenshot 2026-04-30 at 10 24 09 PM" src="https://github.com/user-attachments/assets/d2dc03ee-07ab-4ce0-a7a2-f38c501c66b4" />
+
+While this is setting up, on the main Server Manager menu, you should have a yellow notification flag at the top right. Click it and then click the **"Promote this server to a domain controller"** option. 
+
+<img width="783" height="556" alt="Screenshot 2026-04-30 at 10 31 57 PM" src="https://github.com/user-attachments/assets/06ae9bb9-0213-47aa-a10c-1dd316c2ad9a" />
+
+Under the Deployment Configuration step, you can add the DC to an existing domain, add a new domain to an existing forest, or create a new forest altogether. For the purposes of this tutorial, we're going with the third option: **Add a new forest.** You can name it whatever you wish.
+
+<img width="783" height="556" alt="Screenshot 2026-04-30 at 10 40 55 PM" src="https://github.com/user-attachments/assets/0d3ac47d-c4d0-4da2-b965-79b85bdc40f4" />
+
+In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required. 
+
+
+
+
+
+
+
 
 
 
