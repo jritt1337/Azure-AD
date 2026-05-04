@@ -1,5 +1,5 @@
 # On-premises Active Directory Deployed using Microsoft Azure
-This is a tutorial outlining the setup and configuration of Active Directory using Azure Virtual Machines.
+This is a tutorial outlining the setup and deployment of Active Directory using Azure Virtual Machines.
 
 ## Environments and Technologies Used
 - Microsoft Azure
@@ -72,39 +72,28 @@ Using your preferred client, RDP into the Domain Controller using the username a
 
 <img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 33 38 PM" src="https://github.com/user-attachments/assets/115a945b-24f0-4888-a989-4e6027a63ecb" />
 
-Once connected, our first order of business is to disable the Windows Firewall. Right-click the start menu and then click **Run**. Run **wf.msc** to bring up the Windows Firewall menu. Click **Windows Defender Firewall Properties** and then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**.
+Once connected, our first order of business is to disable the Windows Firewall. Right-click the start menu and then click **Run**. Run **wf.msc** to bring up the Windows Firewall menu. Click **Windows Defender Firewall Properties** and then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**. **IMPORTANT NOTE: In a production environment, you would configure the firewall rules instead of disabling it altogether.**
 
 <img width="1491" height="813" alt="Screenshot 2026-04-28 at 9 42 37 PM" src="https://github.com/user-attachments/assets/d7e576ee-04b5-487b-93d5-e3a3273ffcf6" />.
 
-### Step 4: Configuring the Client's DNS Settings
-Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server.
+### Step 3.5: Windows Firewall Configuration
+As an alternative to disabling Windows Firewall in the previous step, we can configure the required inbound rules to allow domain and network communication. This is a more secure approach that better reflects how firewalls are handled in real-world environments.
 
-Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click save.
+Ensure the firewall is enabled for all profiles (Domain, Private, and Public). Then, in the Windows Firewall menu, click **Inbound Rules**.
 
-<img width="569" height="605" alt="Screenshot 2026-04-28 at 10 00 53 PM" src="https://github.com/user-attachments/assets/9469af6b-4d95-4a46-92dc-c6edf4acd979" />
+<img width="1108" height="731" alt="Screenshot 2026-05-04 at 12 41 20 PM" src="https://github.com/user-attachments/assets/022e2483-e768-49c5-b711-a57eccd1ac16" />
 
-After this, we will need to restart the Client VM so that the settings apply. Go back to the Virtual Machines menu, click the box next to the Client VM, and select the **Restart** option along the top bar.
+From here, ensure the following inbound rule groups and rules are enabled
 
-<img width="1418" height="195" alt="Screenshot 2026-04-28 at 10 07 00 PM" src="https://github.com/user-attachments/assets/c2ed7c8f-880e-43c9-b537-37e79c137c2f" />
+* Active Directory Domain Services (rule group)
+* DNS Server (UDP-In and TCP-In)
+* File and Printer Sharing (Echo Request - ICMPv4-In)
+* Kerberos Key Distribution Center (TCP/UDP-In)
+* Remote Desktop (TCP-In)
 
-After the restart, we will RDP into the client VM to ensure everything is setup correctly and that the connection between the Domain Controller and Client is recognized.
+In a production environment, these rules would further be restricted to trusted network ranges rather than be left open to all sources.
 
-Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the firewall is up, the pings will be blocked. 
-
-**Ping Success**
-
-<img width="645" height="623" alt="Screenshot 2026-04-30 at 8 59 51 AM" src="https://github.com/user-attachments/assets/2c61ff8a-0303-4d3a-b8d0-b5466499ac2e" />
-
-
-**Ping Failure**
-
-<img width="645" height="623" alt="Screenshot 2026-04-30 at 9 08 59 AM" src="https://github.com/user-attachments/assets/4a7ff49a-6e43-4bd8-ab32-d5d41ccdc587" />
-
-Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address.
-
-<img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
-
-### Step 5: Installing Active Directory on the Domain Controller
+### Step 4: Installing Active Directory on the Domain Controller
 On the Domain Controller, open up the Server Manager. It should be opened by default, but if not, you can find it within the Start Menu.
 
 In the Server Manager, click **"Add Roles and Features"**.
@@ -127,7 +116,37 @@ Under the Deployment Configuration step, you can add the DC to an existing domai
 
 <img width="783" height="556" alt="Screenshot 2026-04-30 at 10 40 55 PM" src="https://github.com/user-attachments/assets/0d3ac47d-c4d0-4da2-b965-79b85bdc40f4" />
 
-In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required. 
+In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required.
+
+
+### Step 5: Configuring the Client
+Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server.
+
+Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click save.
+
+<img width="569" height="605" alt="Screenshot 2026-04-28 at 10 00 53 PM" src="https://github.com/user-attachments/assets/9469af6b-4d95-4a46-92dc-c6edf4acd979" />
+
+After this, we will need to restart the Client VM so that the settings apply. Go back to the Virtual Machines menu, click the box next to the Client VM, and select the **Restart** option along the top bar.
+
+<img width="1418" height="195" alt="Screenshot 2026-04-28 at 10 07 00 PM" src="https://github.com/user-attachments/assets/c2ed7c8f-880e-43c9-b537-37e79c137c2f" />
+
+After the restart, we will RDP into the client VM to ensure everything is setup correctly and that the connection between the Domain Controller and Client is recognized.
+
+Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the ping fails, it may indicate a networking or firewall issue, so double check to make sure the firewall is down and/or configured correctly. 
+
+**Ping Success**
+
+<img width="645" height="623" alt="Screenshot 2026-04-30 at 8 59 51 AM" src="https://github.com/user-attachments/assets/2c61ff8a-0303-4d3a-b8d0-b5466499ac2e" />
+
+
+**Ping Failure**
+
+<img width="645" height="623" alt="Screenshot 2026-04-30 at 9 08 59 AM" src="https://github.com/user-attachments/assets/4a7ff49a-6e43-4bd8-ab32-d5d41ccdc587" />
+
+Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address.
+
+<img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
+
 
 
 
