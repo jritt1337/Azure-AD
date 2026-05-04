@@ -72,7 +72,7 @@ Using your preferred client, RDP into the Domain Controller using the username a
 
 <img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 33 38 PM" src="https://github.com/user-attachments/assets/115a945b-24f0-4888-a989-4e6027a63ecb" />
 
-Once connected, our first order of business is to disable the Windows Firewall. Right-click the start menu and then click **Run**. Run **wf.msc** to bring up the Windows Firewall menu. Click **Windows Defender Firewall Properties** and then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**. **IMPORTANT NOTE: In a production environment, you would configure the firewall rules instead of disabling it altogether.**
+For a simple lab setup, one option is to disable Windows Firewall. A more secure alternative is shown in Step 3.5. Right-click the start menu and then click **Run**. Run **wf.msc** to bring up the Windows Firewall menu. Click **Windows Defender Firewall Properties** and then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**. **IMPORTANT NOTE: In a production environment, you would configure the firewall rules instead of disabling it altogether.**
 
 <img width="1491" height="813" alt="Screenshot 2026-04-28 at 9 42 37 PM" src="https://github.com/user-attachments/assets/d7e576ee-04b5-487b-93d5-e3a3273ffcf6" />.
 
@@ -83,7 +83,7 @@ Ensure the firewall is enabled for all profiles (Domain, Private, and Public). T
 
 <img width="1108" height="731" alt="Screenshot 2026-05-04 at 12 41 20 PM" src="https://github.com/user-attachments/assets/022e2483-e768-49c5-b711-a57eccd1ac16" />
 
-From here, ensure the following inbound rule groups and rules are enabled
+From here, ensure the following inbound rule groups and rules are enabled:
 
 * Active Directory Domain Services (rule group)
 * DNS Server (UDP-In and TCP-In)
@@ -118,9 +118,29 @@ Under the Deployment Configuration step, you can add the DC to an existing domai
 
 In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required.
 
+### Step 5: Adding and Managing Users in Active Directory
 
-### Step 5: Configuring the Client
-Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server.
+Now that Active Directory is deployed, we want to add and manage users for our domain. Open up **Active Directory Users and Computers** via the Start Menu or by running "**dsa.msc**". From here, find the domain you created and expand the options. Right-click the domain to access the available options. Let’s create two Organizational Units: Employees and Admins. From the right-click menu, click **New > Organizational Unit**. Create an "Employees" Organizational Unit, then repeat this process for the "Admins" unit. These Organizational Units help separate users by role and make it easier to apply policies and permissions later.
+
+<img width="602" height="473" alt="Screenshot 2026-05-04 at 2 06 38 PM" src="https://github.com/user-attachments/assets/a6f24f23-a5fa-4fb1-b17a-fbf98b080892" />
+
+
+From here, let's make an admin account. Right-click the new **Admins** organizational unit, then **New > User**. Fill out the information, and on the next menu you will be able to set the password for the user. As this will be an admin account, do make sure it is a secure password. You can use any of the options listed per your or your organizations needs or policies. Afterwards, click Next, then Finish.
+
+
+<img width="602" height="473" alt="Screenshot 2026-05-04 at 2 12 13 PM" src="https://github.com/user-attachments/assets/ee847b67-5862-41c4-9bf7-e2e6e69bd693" />
+
+Organizational Units (OUs) are used for organization and policy management, but they do not grant permissions. To give this user administrative privileges, we must add them to the built-in **Domain Admins** group. Right-click the new user within the Admins Organizational Unit and click **Properties**. Click the **Member Of** tab and click **Add**. We're going to add this user to the built-in **Domain Admins** group, so type that in the field and hit OK, then apply the settings. This account can now be used to log into any domain-joined machine with administrative privileges. We will use this account to log into the client machine after it has been joined to the domain.
+
+<img width="1103" height="543" alt="Screenshot 2026-05-04 at 2 14 43 PM" src="https://github.com/user-attachments/assets/5a5cc17e-fa18-417a-af54-7f699caf529d" />
+
+
+**NOTE: In production environments, Domain Admin accounts should be limited and used only when necessary due to their elevated privileges.**
+
+
+
+### Step 6: Configuring the Client 
+Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server and join it to the domain.
 
 Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click save.
 
@@ -132,7 +152,7 @@ After this, we will need to restart the Client VM so that the settings apply. Go
 
 After the restart, we will RDP into the client VM to ensure everything is setup correctly and that the connection between the Domain Controller and Client is recognized.
 
-Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the ping fails, it may indicate a networking or firewall issue, so double check to make sure the firewall is down and/or configured correctly. 
+Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the ping fails, it may indicate a networking or firewall issue, so ensure that the firewall is configured correctly, or confirm it was disabled if you chose the simpler lab method.
 
 **Ping Success**
 
@@ -146,6 +166,11 @@ Once logged into the client, open **Windows Powershell** and type "**ping (*inse
 Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address.
 
 <img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
+
+Once you've ensured the Client is communicating with the DC properly, it's time to join the client to the domain. Right-click the Start menu, select **System**, then click **Advanced system settings**. In the Computer Name tab, click **Change**. Check the **Domain** option and fill in the field with the name of your domain. You will require authorized admin credentials to join the client to the domain. After joining, reboot the client. After the restart, log in to the domain account using the format **DOMAIN\username or user@domain.com** (ex. **DOMAIN\jdoe** or **jdoe@domain.com**). Once logged in, you can verify domain membership by opening System Properties and confirming the computer is joined to the domain, and confirm the logged-in user by running **whoami** in Command Prompt or PowerShell.
+
+<img width="1505" height="960" alt="Screenshot 2026-05-04 at 1 26 35 PM" src="https://github.com/user-attachments/assets/2c2d1dc6-63e1-462c-8f07-d284db84368b" />
+
 
 
 
