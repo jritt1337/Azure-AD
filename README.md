@@ -167,9 +167,10 @@ Also, type "**ipconfig /all**" and check the client's DNS server. It should be p
 
 <img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
 
-Once you've ensured the Client is communicating with the DC properly, it's time to join the client to the domain. Right-click the Start menu, select **System**, then click **Advanced system settings**. In the Computer Name tab, click **Change**. Check the **Domain** option and fill in the field with the name of your domain. You will require authorized admin credentials to join the client to the domain. After joining, reboot the client. After the restart, log in to the domain account using the format **DOMAIN\username or user@domain.com** (ex. **DOMAIN\jdoe** or **jdoe@domain.com**). Once logged in, you can verify domain membership by opening System Properties and confirming the computer is joined to the domain, and confirm the logged-in user by running **whoami** in Command Prompt or PowerShell.
-
+Once you've ensured the Client is communicating with the DC properly, it's time to join the client to the domain. Right-click the Start menu, select **System**, then click **Advanced system settings**. In the Computer Name tab, click **Change**. Check the **Domain** option and fill in the field with the name of your domain. You will require authorized admin credentials to join the client to the domain. After joining, reboot the client. 
 <img width="1505" height="960" alt="Screenshot 2026-05-04 at 1 26 35 PM" src="https://github.com/user-attachments/assets/2c2d1dc6-63e1-462c-8f07-d284db84368b" />
+
+After the restart, log in to the domain account using the format **DOMAIN\username or user@domain.com** (ex. **DOMAIN\jdoe** or **jdoe@domain.com**). Once logged in, you can verify domain membership by opening System Properties and confirming the computer is joined to the domain, and confirm the logged-in user by running **whoami** in Command Prompt or PowerShell.
 
 
 
