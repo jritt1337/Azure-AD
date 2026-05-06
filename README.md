@@ -45,7 +45,7 @@ Once everything is in order, click **Review + Create**. While this VM is spinnin
 
 Once both VMs are created, we're ready to start setting everything up.
 
-### Step 3 - Configuring the Domain Controller
+### Step 3: Configuring the Domain Controller
 
 Once the Domain Controller VM is created, we will need to set its private IP address to be static. This will allow us to use the Domain Controller as the DNS server for the Client. To do this, you will navigate to the Virtual Machines menu and click on the Domain Controller VM. Click **Networking > Network Settings** on the sidebar, and then click the **NIC at the top of the screen**. 
 
@@ -137,7 +137,7 @@ Organizational Units (OUs) are used for organization and policy management, but 
 
 **NOTE: In production environments, Domain Admin accounts should be limited and used only when necessary due to their elevated privileges.**
 
-
+Now create a few standard employee accounts within the Employees Organizational Unit. However, we will need to give these users RDP permissions to be able to login to the client, which we will do later. 
 
 ### Step 6: Configuring the Client 
 Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server and join it to the domain.
@@ -173,6 +173,50 @@ Once you've ensured the Client is communicating with the DC properly, it's time 
 <img width="1505" height="960" alt="Screenshot 2026-05-04 at 1 26 35 PM" src="https://github.com/user-attachments/assets/2c2d1dc6-63e1-462c-8f07-d284db84368b" />
 
 After the restart, log in to the domain account using the format **DOMAIN\username or user@domain.com** (ex. **DOMAIN\jdoe** or **jdoe@domain.com**). Once logged in, you can verify domain membership by opening System Properties and confirming the computer is joined to the domain, and confirm the logged-in user by running **whoami** in Command Prompt or PowerShell.
+
+### Step 7: Basic Group Policy Management
+Finally, we'll cover some group policy basics. If you have not already done so, create a few employee accounts within the Employees Organizational Unit. Also, create a **Workstations** OU and drag the client machine from the **Computers** container to this new OU. Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
+
+Open the Active Directory Users and Computers utility, find and right-click the Employees OU, select **New > Group**. Name the group however you wish. For the purposes of this lab, I used "Remote Users". Make sure that the group scope is **Global** and the group type is **Security**.
+
+<img width="739" height="494" alt="Screenshot 2026-05-05 at 8 39 08 PM" src="https://github.com/user-attachments/assets/79e5c10e-c547-4f71-b37b-615c7f731503" />
+
+Then afterwards, double-click the group, and add the Users under the **Members** tab.
+
+Now we will need to manage the permissions for the client machine. Return to the **Group Policy Management Editor**, find the Workstations OU, right click and **Create a GPO in this domain, and Link it here...**. Name it something like "Remote Access". Right click the policy then click edit. Afterwards, navigate to **Computer Configuration > Windows Settings > Security Settings > Restricted Groups**. Right-click and select **Add Group**. 
+
+<img width="1131" height="696" alt="Screenshot 2026-05-05 at 9 07 53 PM" src="https://github.com/user-attachments/assets/e64e334a-45bd-4533-aa68-13ef0044eb5f" />
+
+When the Add Group window appears, click **Browse**, enter **Remote Desktop Users** and click OK.
+
+<img width="597" height="462" alt="Screenshot 2026-05-05 at 9 11 10 PM" src="https://github.com/user-attachments/assets/db0add00-40d7-4c76-a4fc-60e80b83c406" />
+
+Afterwards, double-click the group and when the Properties windows appears, add the **"Remote Users" (or whatever you named the group)** group. This should allow any users in the Remote Users group to log on to the client remotely.
+
+Now on the client. While logged on as an administrator, open Powershell and run "**gpupdate /force**".
+
+<img width="1114" height="627" alt="Screenshot 2026-05-05 at 9 39 39 PM" src="https://github.com/user-attachments/assets/606df195-3c64-4840-9280-f2c88c1c56f3" />
+
+You can verify the applied Group Policy settings by running **gpresult /r** in PowerShell or Command Prompt.
+
+After the Group Policy is updated, you must restart the client. Afterwards, any of the Employees within the Remote Users group should be able to log on to the client.
+
+
+<img width="1114" height="589" alt="Screenshot 2026-05-05 at 9 33 15 PM" src="https://github.com/user-attachments/assets/be907a1b-0cd0-4ecc-b191-1133452ad9b5" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
