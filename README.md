@@ -5,7 +5,7 @@ This lab demonstrates the deployment and management of a Windows Active Director
 - Microsoft Azure
 - Remote Desktop
 - Active Directory Domain Services
-- Powershell
+- PowerShell
 
 ## Operating Systems Used
 - Windows Server 2025 Datacenter: Azure Edition
@@ -152,7 +152,7 @@ After this, we will need to restart the Client VM so that the settings apply. Go
 
 After the restart, we will RDP into the client VM to ensure everything is setup correctly and that the connection between the Domain Controller and Client is recognized.
 
-Once logged into the client, open **Windows Powershell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the ping fails, it may indicate a networking or firewall issue, so ensure that the firewall is configured correctly, or confirm it was disabled if you chose the simpler lab method.
+Once logged into the client, open **Windows PowerShell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. Most commonly mistake is forgetting to save the firewall settings on the Domain Controller. If the ping fails, it may indicate a networking or firewall issue, so ensure that the firewall is configured correctly, or confirm it was disabled if you chose the simpler lab method.
 
 **Ping Success**
 
@@ -172,7 +172,7 @@ Once you've ensured the Client is communicating with the DC properly, it's time 
 
 <img width="1505" height="960" alt="Screenshot 2026-05-04 at 1 26 35 PM" src="https://github.com/user-attachments/assets/2c2d1dc6-63e1-462c-8f07-d284db84368b" />
 
-After the restart, log in to the domain account using the format **DOMAIN\username or user@domain.com** (ex. **DOMAIN\jdoe** or **jdoe@domain.com**). Once logged in, you can verify domain membership by opening System Properties and confirming the computer is joined to the domain, and confirm the logged-in user by running **whoami** in Command Prompt or PowerShell.
+After the restart, log in with the domain admin account created earlier. **The format for domain logins will now either be DOMAIN\Username, or Username@domain.com**. Employee accounts will be granted Remote Desktop access in the next step.
 
 ### Step 7: Basic Group Policy Management
 Finally, we'll cover some group policy basics. If you have not already done so, create a few employee accounts within the Employees Organizational Unit. Also, create a **Workstations** OU and drag the client machine from the **Computers** container to this new OU. Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
@@ -181,9 +181,9 @@ Open the Active Directory Users and Computers utility, find and right-click the 
 
 <img width="739" height="494" alt="Screenshot 2026-05-05 at 8 39 08 PM" src="https://github.com/user-attachments/assets/79e5c10e-c547-4f71-b37b-615c7f731503" />
 
-Then afterwards, double-click the group, and add the Users under the **Members** tab.
+After creating the group, double-click it and add the employee users under the **Members** tab.
 
-Now we will need to manage the permissions for the client machine. Return to the **Group Policy Management Editor**, find the Workstations OU, right click and **Create a GPO in this domain, and Link it here...**. Name it something like "Remote Access". Right click the policy then click edit. Afterwards, navigate to **Computer Configuration > Windows Settings > Security Settings > Restricted Groups**. Right-click and select **Add Group**. 
+Now we will need to manage the permissions for the client machine. Open the **Group Policy Management Editor**, find the Workstations OU, right click and **Create a GPO in this domain, and Link it here...**. Name it something like "Remote Access". Right click the policy and select edit. Afterwards, navigate to **Computer Configuration > Windows Settings > Security Settings > Restricted Groups**. Right-click and select **Add Group**. 
 
 <img width="1131" height="696" alt="Screenshot 2026-05-05 at 9 07 53 PM" src="https://github.com/user-attachments/assets/e64e334a-45bd-4533-aa68-13ef0044eb5f" />
 
@@ -193,7 +193,9 @@ When the Add Group window appears, click **Browse**, enter **Remote Desktop User
 
 Afterwards, double-click the group and when the Properties windows appears, add the **"Remote Users" (or whatever you named the group)** group. This should allow any users in the Remote Users group to log on to the client remotely.
 
-Now on the client. While logged on as an administrator, open Powershell and run "**gpupdate /force**".
+**NOTE: Restricted Groups can replace the membership of the targeted local group. In production, administrators should carefully test this before applying it broadly.**
+
+Now, on the client while logged on as an administrator, open PowerShell and run "**gpupdate /force**".
 
 <img width="1114" height="627" alt="Screenshot 2026-05-05 at 9 39 39 PM" src="https://github.com/user-attachments/assets/606df195-3c64-4840-9280-f2c88c1c56f3" />
 
