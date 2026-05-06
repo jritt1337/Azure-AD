@@ -1,5 +1,5 @@
-# On-premises Active Directory Deployed using Microsoft Azure
-This is a tutorial outlining the setup and deployment of Active Directory using Azure Virtual Machines, as well as joining clients to the domain.
+# Deploying and Managing Active Directory in Microsoft Azure
+This lab demonstrates the deployment and management of a Windows Active Directory environment hosted on Azure Virtual Machines, including domain configuration, user management, firewall configuration, and client domain joining.
 
 ## Environments and Technologies Used
 - Microsoft Azure
