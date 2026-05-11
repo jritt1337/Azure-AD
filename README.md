@@ -46,15 +46,24 @@ Configure the Domain Controller VM. This machine should be running **Windows Ser
 
 <img width="804" height="689" alt="Screenshot 2026-04-28 at 8 55 27 PM" src="https://github.com/user-attachments/assets/bce4ef59-9794-4aa4-9a7f-9d5f51af5e28" />
 
-Underneath **Administrator Account**, be sure to set a secure admin username and password.
+Underneath **Administrator Account**, be sure to set a secure admin username and password. These credentials will be used later when connecting to the VM through Remote Desktop.
 
-Navigate to the Network tab and ***ensure that the virtual network is set to the virtual network that was created in Step 1.***.
+<img width="830" height="334" alt="Screenshot 2026-05-11 at 2 04 22 PM" src="https://github.com/user-attachments/assets/0421fe4f-98a6-48c6-bf45-50d67a3d497f" />
+
+Navigate to the **Networking** tab and ***ensure that the virtual network is set to the virtual network that was created in Step 1.***.
 
 <img width="804" height="689" alt="Screenshot 2026-04-28 at 8 55 27 PM" src="https://github.com/user-attachments/assets/4bf1abb0-2601-40e2-918e-5cbd4df08815" />
 
-Once everything is in order, click **Review + Create**. While this VM is spinning up, you can go ahead and create the Client VM. This VM will simulate a workstation on the network. Go back through the process of creating a VM, but this time choose **Windows 11 Pro** as the image. ***Once again, double check that this is within the same resource group/region/virtual network as everything else.***.
+Once everything is in order, click **Review + Create**.
 
-Once both VMs are created, we're ready to start setting everything up.
+<img width="729" height="800" alt="Screenshot 2026-05-11 at 2 07 53 PM" src="https://github.com/user-attachments/assets/7c9e15aa-332d-4623-a770-10f4d1f3afaa" />
+
+
+While this VM is spinning up, you can go ahead and create the Client VM. This VM will simulate a workstation on the network. Go back through the process of creating a VM, but this time choose **Windows 11 Pro** as the image. ***Once again, double check that this is within the same resource group/region/virtual network as everything else.***.
+
+<img width="817" height="544" alt="Screenshot 2026-05-11 at 2 09 36 PM" src="https://github.com/user-attachments/assets/54dffdd5-ad68-4173-ac08-7d051f224ad9" />
+
+Once both VMs are created, we're ready to start configuring the Domain Controller.
 
 ### Step 3: Configuring the Domain Controller
 
