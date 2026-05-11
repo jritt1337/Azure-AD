@@ -17,22 +17,32 @@ This lab demonstrates the deployment and management of a Windows Active Director
 For this project, we will create two different virtual machines (VMs). The first will be the Domain Controller, which will use Windows Server 2025 Datacenter: Azure Edition. The second will be a client using Windows 11 Pro.
 
 ### Step 1: Creating the Resource Group and Virtual Network.
-Firstly, before creating the VMs, we need to create a Resource Group. Navigate to the "Resource Group" menu.
+Before creating the VMs, we need to create a Resource Group. In Azure, navigate to the **Resource Groups** menu.
 
 <img width="649" height="741" alt="Screenshot 2026-04-28 at 8 42 34 PM" src="https://github.com/user-attachments/assets/d320d953-b24f-4b57-b280-5dbfa4f9f11c" />
 
-Then from here, create the Resource Group. Name it whatever you want, but do make note of the Region you choose as you will need to create the virtual network and the VMs within the same region.
+From here, click **Create** and configure the Resource Group. You may name the virutal network whatever you wish, but make note of the selected **Region** you choose as you will need to create the virtual network and the VMs within the same region.
 
 <img width="1608" height="844" alt="image" src="https://github.com/user-attachments/assets/95eca0f9-0dcf-42da-9db8-7f5b87fed503" />
 
-Once the Resource Group is created, navigate to the "Virtual Networks" menu to create a virtual network. Yet again, name it whatever you want. ***Make sure this is within the Resource Group that was just created, as well as the same region!***
+Once the Resource Group is created, navigate to the **Virtual Networks** menu.
+
+<img width="848" height="310" alt="Screenshot 2026-05-11 at 1 52 17 PM" src="https://github.com/user-attachments/assets/6f80097f-a11a-441e-9f03-96bf2e199aa1" />
+
+Create and configure the Virtual Network. ***Make sure this is within the Resource Group that was just created, as well as the same region!***
 
 <img width="804" height="656" alt="Screenshot 2026-04-28 at 8 49 48 PM" src="https://github.com/user-attachments/assets/8968fca0-6898-4443-a2b2-34c95706a3df" />
 
-### Step 2: Creating the VMs.
-After the Resource Group and Virtual Network are created, it's time to create the VMs. We will start with the Domain Controller.
+After the Resource Group and Virtual Network have been created, we're ready to begin creating the Virtual Machines.
 
-Navigate to the "Virtual Machines" menu and then create a virtual machine. This machine should be running **Windows Server 2025 Datacenter: Azure Edition**. Double-check to make sure this is in the correct Resource Group and region.
+### Step 2: Creating the VMs.
+Now it's time to create the VMs. We will start with the Domain Controller.
+
+Navigate to the "Virtual Machines" menu and then click **Create**.
+
+<img width="830" height="342" alt="Screenshot 2026-05-11 at 2 00 26 PM" src="https://github.com/user-attachments/assets/925c87c3-1f90-4d9f-8e80-e72a26676f08" />
+
+Configure the Domain Controller VM. This machine should be running **Windows Server 2025 Datacenter: Azure Edition**. Double-check to make sure this is in the correct Resource Group and region.
 
 <img width="804" height="689" alt="Screenshot 2026-04-28 at 8 55 27 PM" src="https://github.com/user-attachments/assets/bce4ef59-9794-4aa4-9a7f-9d5f51af5e28" />
 
@@ -77,7 +87,7 @@ For a simple lab setup, one option is to disable Windows Firewall. A more secure
 
 <img width="1491" height="813" alt="Screenshot 2026-04-28 at 9 42 37 PM" src="https://github.com/user-attachments/assets/d7e576ee-04b5-487b-93d5-e3a3273ffcf6" />.
 
-### Step 3.5: Windows Firewall Configuration
+### Step 4: Windows Firewall Configuration
 As an alternative to disabling Windows Firewall in the previous step, we can configure the required inbound rules to allow domain and network communication. This is a more secure approach that better reflects how firewalls are handled in real-world environments.
 
 Ensure the firewall is enabled for all profiles (Domain, Private, and Public). Then, in the Windows Firewall menu, click **Inbound Rules**.
@@ -94,7 +104,7 @@ From here, ensure the following inbound rule groups and rules are enabled:
 
 In a production environment, these rules would further be restricted to trusted network ranges rather than be left open to all sources.
 
-### Step 4: Installing Active Directory on the Domain Controller
+### Step 5: Installing Active Directory on the Domain Controller
 On the Domain Controller, open up the Server Manager. It should be opened by default, but if not, you can find it within the Start Menu.
 
 In the Server Manager, click **"Add Roles and Features"**.
@@ -119,7 +129,7 @@ Under the Deployment Configuration step, you can add the DC to an existing domai
 
 In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required.
 
-### Step 5: Adding and Managing Users in Active Directory
+### Step 6: Adding and Managing Users in Active Directory
 
 Now that Active Directory is deployed, we want to add and manage users for our domain. Open up **Active Directory Users and Computers** via the Start Menu or by running "**dsa.msc**". From here, find the domain you created and expand the options. Right-click the domain to access the available options. Let’s create two Organizational Units: Employees and Admins. From the right-click menu, click **New > Organizational Unit**. Create an "Employees" Organizational Unit, then repeat this process for the "Admins" unit. These Organizational Units help separate users by role and make it easier to apply policies and permissions later.
 
@@ -140,7 +150,7 @@ Organizational Units (OUs) are used for organization and policy management, but 
 
 Now create a few standard employee accounts within the Employees Organizational Unit. However, we will need to give these users RDP permissions to be able to login to the client, which we will do later. 
 
-### Step 6: Configuring the Client 
+### Step 7: Configuring the Client 
 Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server and join it to the domain.
 
 Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click save.
@@ -175,7 +185,7 @@ Once you've ensured the Client is communicating with the DC properly, it's time 
 
 After the restart, log in with the domain admin account created earlier. **The format for domain logins will now be either DOMAIN\Username, or Username@domain.com**. Employee accounts will be granted Remote Desktop access in the next step.
 
-### Step 7: Basic Group Policy Management
+### Step 8: Basic Group Policy Management
 Finally, we'll cover some group policy basics. If you have not already done so, create a few employee accounts within the Employees Organizational Unit. Also, create a **Workstations** OU and drag the client machine from the **Computers** container to this new OU. Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
 
 Open the Active Directory Users and Computers utility, find and right-click the Employees OU, select **New > Group**. Name the group however you wish. For the purposes of this lab, I used "Remote Users". Make sure that the group scope is **Global** and the group type is **Security**.
