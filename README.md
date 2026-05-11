@@ -36,13 +36,13 @@ Create and configure the Virtual Network. ***Make sure this is within the Resour
 After the Resource Group and Virtual Network have been created, we're ready to begin creating the Virtual Machines.
 
 ### Step 2: Creating the VMs.
-Now it's time to create the VMs. We will start with the Domain Controller.
+Now we can begin creating the virtual machines. We will start with the Domain Controller.
 
-Navigate to the "Virtual Machines" menu and then click **Create**.
+Navigate to the **Virtual Machines** menu and then click **Create**.
 
 <img width="830" height="342" alt="Screenshot 2026-05-11 at 2 00 26 PM" src="https://github.com/user-attachments/assets/925c87c3-1f90-4d9f-8e80-e72a26676f08" />
 
-Configure the Domain Controller VM. This machine should be running **Windows Server 2025 Datacenter: Azure Edition**. Double-check to make sure this is in the correct Resource Group and region.
+Configure the Domain Controller VM. This machine should be running **Windows Server 2025 Datacenter: Azure Edition**. Double-check that the VM is being created in the correct Resource Group and Region.
 
 <img width="804" height="689" alt="Screenshot 2026-04-28 at 8 55 27 PM" src="https://github.com/user-attachments/assets/bce4ef59-9794-4aa4-9a7f-9d5f51af5e28" />
 
@@ -50,7 +50,7 @@ Underneath **Administrator Account**, be sure to set a secure admin username and
 
 <img width="830" height="334" alt="Screenshot 2026-05-11 at 2 04 22 PM" src="https://github.com/user-attachments/assets/0421fe4f-98a6-48c6-bf45-50d67a3d497f" />
 
-Navigate to the **Networking** tab and ***ensure that the virtual network is set to the virtual network that was created in Step 1.***.
+Navigate to the **Networking** tab and *ensure that the virtual network is set to the virtual network that was created in Step 1.*.
 
 <img width="804" height="689" alt="Screenshot 2026-04-28 at 8 55 27 PM" src="https://github.com/user-attachments/assets/4bf1abb0-2601-40e2-918e-5cbd4df08815" />
 
@@ -75,10 +75,14 @@ From here, click **ipconfig1**, and then change the Private IP address settings 
 
 <img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 20 23 PM" src="https://github.com/user-attachments/assets/39d6a4a7-5f9a-4fdc-bd0a-8e1bd89d99b1" />
 
-Now we need to RDP into the Domain Controller using a RDP client. Here are a few suggestions.
+Now we need to connect to the Domain Controller using Remote Desktop Protocol (RDP). Return to the Domain Controller VM overview page and locate the **Public IP Address**
+
+<img width="926" height="628" alt="Screenshot 2026-05-11 at 2 21 27 PM" src="https://github.com/user-attachments/assets/df4677be-970b-4bb9-b1f8-ee90729b29c1" />
+
+Open your preferred RDP Client. If you don't have one, here are some suggestions.
 
 #### Windows
-- mstsc.exe
+- mstsc.exe (Built into Windows 11)
 - Windows App
 
 #### MacOS
@@ -88,13 +92,35 @@ Now we need to RDP into the Domain Controller using a RDP client. Here are a few
 - Remmina
 - Rustdesk
 
-Using your preferred client, RDP into the Domain Controller using the username and password you assigned to it. You can find the IP needed to RDP in by examining the Domain Controller in the Virtual Machines menu.
+I'm using Windows App on MacOS, so the following directions may vary depending on your preferred client. In Windows App, you can add the Domain Controller to the Devices menu by clicking the + symbol at the top right, and selecting **Add a PC**.
+
+<img width="1382" height="433" alt="Screenshot 2026-05-11 at 2 25 58 PM" src="https://github.com/user-attachments/assets/7c3a8300-fbf2-44bb-aca8-8e6f92f6c34a" />
+
+In the Add a PC window, input the Domain Controller's Public IP into the **PC Name** field. You can create a label for this VM by filling out the **Friendly Name** field.
+
+<img width="497" height="550" alt="Screenshot 2026-05-11 at 2 27 29 PM" src="https://github.com/user-attachments/assets/f24ebe76-68aa-4c83-aec7-139fe2d638b6" />
+
+Once the Domain Controller is added to your Devices menu, you can double-click it to initialize the connection. You will be asked to provide credentials to log in. Use the Administrator Account credentials you assigned when you created the Domain Controller.
 
 <img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 33 38 PM" src="https://github.com/user-attachments/assets/115a945b-24f0-4888-a989-4e6027a63ecb" />
 
-For a simple lab setup, one option is to disable Windows Firewall. A more secure alternative is shown in Step 3.5. Right-click the start menu and then click **Run**. Run **wf.msc** to bring up the Windows Firewall menu. Click **Windows Defender Firewall Properties** and then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**. **IMPORTANT NOTE: In a production environment, you would configure the firewall rules instead of disabling it altogether.**
+Once connected, you should now be logged into the Windows Server desktop for the Domain Controller. Before we install and configure Active Directory, we need to ensure that other machines on the network can properly communicate with this server. For a simple lab setup, one option is to disable Windows Firewall. Right-click the Start Menu and select **Run**.
 
-<img width="1491" height="813" alt="Screenshot 2026-04-28 at 9 42 37 PM" src="https://github.com/user-attachments/assets/d7e576ee-04b5-487b-93d5-e3a3273ffcf6" />.
+<img width="209" height="618" alt="Screenshot 2026-05-11 at 2 37 45 PM" src="https://github.com/user-attachments/assets/a0b010d2-c913-4b05-ae15-b06589081976" />
+
+Run **wf.msc** to bring up the Windows Firewall menu.
+
+<img width="418" height="236" alt="Screenshot 2026-05-11 at 2 38 07 PM" src="https://github.com/user-attachments/assets/eabd67f3-f633-4540-bb35-f172619241c8" />
+
+Click **Windows Defender Firewall Properties**. 
+
+<img width="1045" height="525" alt="Screenshot 2026-05-11 at 2 40 13 PM" src="https://github.com/user-attachments/assets/219c6a1f-109e-44fd-8a32-a73bac14895d" />
+
+Then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**. 
+
+<img width="404" height="455" alt="Screenshot 2026-05-11 at 2 41 27 PM" src="https://github.com/user-attachments/assets/78fd11ae-37d6-4bbf-83ff-1188a180ff9f" />
+
+In a production environment, firewall rules should be configured instead of disabling the firewall entirely. The next step covers a more secure approach.
 
 ### Step 4: Windows Firewall Configuration
 As an alternative to disabling Windows Firewall in the previous step, we can configure the required inbound rules to allow domain and network communication. This is a more secure approach that better reflects how firewalls are handled in real-world environments.
@@ -103,13 +129,21 @@ Ensure the firewall is enabled for all profiles (Domain, Private, and Public). T
 
 <img width="1108" height="731" alt="Screenshot 2026-05-04 at 12 41 20 PM" src="https://github.com/user-attachments/assets/022e2483-e768-49c5-b711-a57eccd1ac16" />
 
-From here, ensure the following inbound rule groups and rules are enabled:
+You will now see a long list of firewall rules.
+
+<img width="1132" height="783" alt="Screenshot 2026-05-11 at 2 51 05 PM" src="https://github.com/user-attachments/assets/fea36073-e4c3-41e6-910a-5c0468193773" />
+
+From here, ensure the following inbound rule groups and rules are enabled. Some of these rules may already be enabled depending on Windows Server configuration. These rules are:
 
 * Active Directory Domain Services (rule group)
 * DNS Server (UDP-In and TCP-In)
 * File and Printer Sharing (Echo Request - ICMPv4-In)
 * Kerberos Key Distribution Center (TCP/UDP-In)
 * Remote Desktop (TCP-In)
+
+To enable a rule, right-click it and select **Enable Rule**.
+
+<img width="557" height="258" alt="Screenshot 2026-05-11 at 2 50 38 PM" src="https://github.com/user-attachments/assets/793e419c-b951-4cf0-8a79-9c3ac4f218d8" />
 
 In a production environment, these rules would further be restricted to trusted network ranges rather than be left open to all sources.
 
