@@ -243,9 +243,6 @@ Now click **Apply** to add the user to the Domain Admins group.
 
 This account can now be used to log into any domain-joined machine with administrative privileges. We will use this account to log into the client machine after it has been joined to the domain.
 
-<img width="1103" height="543" alt="Screenshot 2026-05-04 at 2 14 43 PM" src="https://github.com/user-attachments/assets/5a5cc17e-fa18-417a-af54-7f699caf529d" />
-
-
 **NOTE: In production environments, Domain Admin accounts should be limited and used only when necessary due to their elevated privileges.**
 
 Now create a few standard employee accounts within the Employees Organizational Unit. However, we will need to give these users RDP permissions to be able to login to the client, which we will do later. 
@@ -253,7 +250,11 @@ Now create a few standard employee accounts within the Employees Organizational 
 ### Step 7: Configuring the Client 
 Now that we have the Domain Controller configured, it's time to configure the Client to use the Domain Controller as its DNS server and join it to the domain.
 
-Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click save.
+Navigate to the Virtual Machines menu, click your client VM, then **Network Settings** and then the NIC. 
+
+<img width="815" height="633" alt="Screenshot 2026-05-12 at 6 33 08 PM" src="https://github.com/user-attachments/assets/03edf64d-344c-40c5-ba3c-60e0ab74518d" />
+
+In the sidebar, click **DNS Settings** and then **Custom**. Fill out one of the fields with the Private IP of the Domain Controller, and click **Save**.
 
 <img width="569" height="605" alt="Screenshot 2026-04-28 at 10 00 53 PM" src="https://github.com/user-attachments/assets/9469af6b-4d95-4a46-92dc-c6edf4acd979" />
 
@@ -261,10 +262,10 @@ After this, we will need to restart the Client VM so that the settings apply. Go
 
 <img width="1418" height="195" alt="Screenshot 2026-04-28 at 10 07 00 PM" src="https://github.com/user-attachments/assets/c2ed7c8f-880e-43c9-b537-37e79c137c2f" />
 
-After the restart, we will RDP into the client VM to ensure everything is setup correctly and that the connection between the Domain Controller and Client is recognized.
+After the restart, connect to it using your preferred RDP client.
 
-Once logged into the client, open **Windows PowerShell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. If the ping is timing out, go back and review all the steps. The most common mistake is forgetting to save the firewall settings on the Domain Controller. If the ping fails, it may indicate a networking or firewall issue, so ensure that the firewall is configured correctly, or confirm it was disabled if you chose the simpler lab method.
 
+Once logged into the client, open **Windows PowerShell** and type "**ping (*insert DC private IP address here*)**" and check to make sure the DC is pinging back. 
 **Ping Success**
 
 <img width="645" height="623" alt="Screenshot 2026-04-30 at 8 59 51 AM" src="https://github.com/user-attachments/assets/2c61ff8a-0303-4d3a-b8d0-b5466499ac2e" />
@@ -274,14 +275,34 @@ Once logged into the client, open **Windows PowerShell** and type "**ping (*inse
 
 <img width="645" height="623" alt="Screenshot 2026-04-30 at 9 08 59 AM" src="https://github.com/user-attachments/assets/4a7ff49a-6e43-4bd8-ab32-d5d41ccdc587" />
 
-Also, type "**ipconfig /all**" and check the client's DNS server. It should be pointing to your DC's private IP address.
+If the ping is timing out, go back and review all the steps. The most common mistakes are:
+
+- The Domain Controller firewall rules are configured incorrectly.
+- The DNS server IP was not updated
+- The Client VM and Domain Controller are not on the same virtual network.
+
+
+Next, verify that the client is using the Domain Controller as its DNS server by running:"**ipconfig /all**" 
 
 <img width="780" height="623" alt="Screenshot 2026-04-30 at 9 15 03 AM" src="https://github.com/user-attachments/assets/3c37c052-0334-4eda-bbda-482e0b90e9f4" />
 
 
-Once you've ensured the Client is communicating with the DC properly, it's time to join the client to the domain. Right-click the Start menu, select **System**, then click **Advanced system settings**. In the Computer Name tab, click **Change**. Check the **Domain** option and fill in the field with the name of your domain. You will require authorized admin credentials to join the client to the domain. After joining, reboot the client. 
+Once you've ensured the Client is communicating with the DC properly, it's time to join the client to the domain. Right-click the Start menu, select **System**.
 
-<img width="1505" height="960" alt="Screenshot 2026-05-04 at 1 26 35 PM" src="https://github.com/user-attachments/assets/2c2d1dc6-63e1-462c-8f07-d284db84368b" />
+<img width="515" height="980" alt="Screenshot 2026-05-12 at 6 48 25 PM" src="https://github.com/user-attachments/assets/7233ba28-199e-45d5-88e2-b5b01d7a40c9" />
+
+
+Then click **Domain or workgroup**.
+
+<img width="1197" height="932" alt="Screenshot 2026-05-12 at 6 48 50 PM" src="https://github.com/user-attachments/assets/a87e9e12-1ffb-4511-854c-f0331c1a3b33" />
+
+In the Computer Name tab, click **Change**.
+
+<img width="414" height="471" alt="Screenshot 2026-05-12 at 6 50 41 PM" src="https://github.com/user-attachments/assets/1b1937a2-bb25-4dac-832a-740b1e0ea701" />
+
+Check the **Domain** option and fill in the field with the name of your domain. You will require authorized admin credentials to join the client to the domain. After joining, reboot the client. 
+
+<img width="414" height="471" alt="Screenshot 2026-05-12 at 6 51 39 PM" src="https://github.com/user-attachments/assets/29891e59-2c2d-4637-a71f-0dfb6be1ebc9" />
 
 After the restart, log in with the domain admin account created earlier. **The format for domain logins will now be either DOMAIN\Username, or Username@domain.com**. Employee accounts will be granted Remote Desktop access in the next step.
 
