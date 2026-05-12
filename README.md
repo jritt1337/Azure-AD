@@ -307,7 +307,10 @@ Check the **Domain** option and fill in the field with the name of your domain. 
 After the restart, log in with the domain admin account created earlier. **The format for domain logins will now be either DOMAIN\Username, or Username@domain.com**. Employee accounts will be granted Remote Desktop access in the next step.
 
 ### Step 8: Basic Group Policy Management
-Finally, we'll cover some group policy basics. If you have not already done so, create a few employee accounts within the Employees Organizational Unit. Also, create a **Workstations** OU and drag the client machine from the **Computers** container to this new OU. Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
+Finally, we'll cover some group policy basics.
+If you have not already done so, create a few employee accounts within the Employees Organizational Unit. 
+
+Also, create a **Workstations** OU and drag the client machine from the **Computers** container to this new OU. Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
 
 Open the Active Directory Users and Computers utility, find and right-click the Employees OU, select **New > Group**. Name the group however you wish. For the purposes of this lab, I used "Remote Users". Make sure that the group scope is **Global** and the group type is **Security**.
 
