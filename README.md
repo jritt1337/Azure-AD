@@ -154,15 +154,29 @@ In the Server Manager, click **"Add Roles and Features"**.
 
 <img width="931" height="395" alt="Screenshot 2026-04-30 at 10 22 10 PM" src="https://github.com/user-attachments/assets/3566b7de-153d-433c-87ff-3c5d617a7ac0" />
 
-You can click Next on the next few screens, make sure the appropriate server is selected when at the "Server Selection" step, and when you get to "Server Roles" click **Active Directory Domain Services** and click the "Add Features" button on the pop-up that follows.
+On the installation type screen, leave **Role-based or feature-based installation** selected and click **Next**.
 
-<img width="905" height="518" alt="Screenshot 2026-04-30 at 10 23 49 PM" src="https://github.com/user-attachments/assets/9b095bc3-97e0-4416-8dd0-f23088b5256c" />
+<img width="819" height="668" alt="Screenshot 2026-05-12 at 5 50 02 PM" src="https://github.com/user-attachments/assets/ea7fdd28-09ba-4351-9ce2-61b2889734bc" />
 
-Feel free to click through the next few steps, until the confirmation. There you will check the box next to **"Restart the destination server automatically if required"**, then click **"Install"**
+On the **Server Selection** screen, ensure your Domain Controller is selected, then click **Next**.
+
+<img width="819" height="572" alt="Screenshot 2026-05-12 at 5 52 44 PM" src="https://github.com/user-attachments/assets/615f83aa-09a9-4dd7-baa1-cb08e0fafa0f" />
+
+
+On the **Server Roles** screen, check **Active Directory Domain Services**.
+
+<img width="493" height="517" alt="Screenshot 2026-05-12 at 5 57 10 PM" src="https://github.com/user-attachments/assets/c0727364-290d-4a86-a1e5-eda85c979565" />
+
+When prompted, click Add **Features**.
+
+<img width="412" height="422" alt="Screenshot 2026-05-12 at 5 55 02 PM" src="https://github.com/user-attachments/assets/d3145c1a-82fb-439f-8921-d5f1ca8b870a" />
+
+
+Feel free to click through the next few steps, until the Confirmation page. There you will check the box next to **"Restart the destination server automatically if required"**, then click **"Install"**
 
 <img width="783" height="556" alt="Screenshot 2026-04-30 at 10 24 09 PM" src="https://github.com/user-attachments/assets/d2dc03ee-07ab-4ce0-a7a2-f38c501c66b4" />
 
-While this is setting up, on the main Server Manager menu, you should have a yellow notification flag at the top right. Click it and then click the **"Promote this server to a domain controller"** option. 
+While this is setting up, on the main Server Manager menu, you should have a yellow notification flag at the top-right corner. Click it and then click the **"Promote this server to a domain controller"** option. 
 
 <img width="783" height="556" alt="Screenshot 2026-04-30 at 10 31 57 PM" src="https://github.com/user-attachments/assets/06ae9bb9-0213-47aa-a10c-1dd316c2ad9a" />
 
@@ -170,21 +184,64 @@ Under the Deployment Configuration step, you can add the DC to an existing domai
 
 <img width="783" height="556" alt="Screenshot 2026-04-30 at 10 40 55 PM" src="https://github.com/user-attachments/assets/0d3ac47d-c4d0-4da2-b965-79b85bdc40f4" />
 
-In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required.
+In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. 
+
+After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required.
 
 ### Step 6: Adding and Managing Users in Active Directory
 
-Now that Active Directory is deployed, we want to add and manage users for our domain. Open up **Active Directory Users and Computers** via the Start Menu or by running "**dsa.msc**". From here, find the domain you created and expand the options. Right-click the domain to access the available options. Let’s create two Organizational Units: Employees and Admins. From the right-click menu, click **New > Organizational Unit**. Create an "Employees" Organizational Unit, then repeat this process for the "Admins" unit. These Organizational Units help separate users by role and make it easier to apply policies and permissions later.
+Now that Active Directory is deployed, we want to add and manage users for our domain. Open up **Active Directory Users and Computers** via the Start Menu or by running "**dsa.msc**". 
+
+<img width="1220" height="727" alt="Screenshot 2026-05-12 at 6 03 35 PM" src="https://github.com/user-attachments/assets/1912456e-66bb-4e7c-adb3-e5848d9f2d00" />
+
+From here, find the domain you created in the left-hand sidebar. Right-click the domain to access the available options. From the right-click menu, click **New > Organizational Unit**.
 
 <img width="602" height="473" alt="Screenshot 2026-05-04 at 2 06 38 PM" src="https://github.com/user-attachments/assets/a6f24f23-a5fa-4fb1-b17a-fbf98b080892" />
 
+Create an Organizational Unit named **Employees**.
 
-From here, let's make an admin account. Right-click the new **Admins** organizational unit, then **New > User**. Fill out the information, and on the next menu you will be able to set the password for the user. As this will be an admin account, do make sure it is a secure password. You can use any of the options listed per your or your organizations needs or policies. Afterwards, click Next, then Finish.
+<img width="438" height="413" alt="Screenshot 2026-05-12 at 6 07 31 PM" src="https://github.com/user-attachments/assets/315db874-5bfc-4590-b7f1-838ac51ecac5" />
 
 
-<img width="602" height="473" alt="Screenshot 2026-05-04 at 2 12 13 PM" src="https://github.com/user-attachments/assets/ee847b67-5862-41c4-9bf7-e2e6e69bd693" />
+Then repeat this process for an Organizational Unit named **Admins**.
 
-Organizational Units (OUs) are used for organization and policy management, but they do not grant permissions. To give this user administrative privileges, we must add them to the built-in **Domain Admins** group. Right-click the new user within the Admins Organizational Unit and click **Properties**. Click the **Member Of** tab and click **Add**. We're going to add this user to the built-in **Domain Admins** group, so type that in the field and hit OK, then apply the settings. This account can now be used to log into any domain-joined machine with administrative privileges. We will use this account to log into the client machine after it has been joined to the domain.
+<img width="438" height="413" alt="Screenshot 2026-05-12 at 6 13 07 PM" src="https://github.com/user-attachments/assets/a4490088-7019-4da1-ae10-75c78d249107" />
+
+These Organizational Units help separate users by role and make it easier to apply group policies and permissions later.
+
+From here, let's make an administrative user account. Right-click the new **Admins** organizational unit, then **New > User**. 
+
+<img width="594" height="444" alt="Screenshot 2026-05-12 at 6 14 20 PM" src="https://github.com/user-attachments/assets/f5c87efc-bad9-4c28-981b-a121f7a3a0a6" />
+
+Fill out the information, then click **Next**.
+
+<img width="441" height="385" alt="Screenshot 2026-05-12 at 6 17 01 PM" src="https://github.com/user-attachments/assets/a10a015e-6709-496f-974e-c7f291d6dcd9" />
+
+On the password configuration screen, assign a secure password for the account. Configure any password options that fit your environment or lab requirements, then click **Next** and **Finish**.
+
+<img width="441" height="385" alt="Screenshot 2026-05-12 at 6 18 32 PM" src="https://github.com/user-attachments/assets/82fceb4d-f673-4f24-9f1f-4afcca01de22" />
+
+Organizational Units (OUs) are used for organization and policy management, but they do not grant permissions. To give this user administrative privileges, we must add them to the built-in **Domain Admins** group. 
+
+Right-click the new user within the Admins Organizational Unit and click **Properties**. 
+
+<img width="441" height="385" alt="Screenshot 2026-05-12 at 6 20 46 PM" src="https://github.com/user-attachments/assets/39d0db5e-e338-4095-9203-d3bccdaff6ad" />
+
+
+Click the **Member Of** tab and click **Add**. 
+
+<img width="405" height="540" alt="Screenshot 2026-05-12 at 6 21 38 PM" src="https://github.com/user-attachments/assets/6462ea68-482e-4314-a940-ddc5d032340f" />
+
+We're going to add this user to the built-in **Domain Admins** group, so type that in the field and hit **OK**.
+
+<img width="464" height="282" alt="Screenshot 2026-05-12 at 6 23 45 PM" src="https://github.com/user-attachments/assets/2931d34f-14b3-4110-836e-92a8aae3c3b9" />
+
+
+Now click **Apply** to add the user to the Domain Admins group.
+
+<img width="410" height="538" alt="Screenshot 2026-05-12 at 6 24 47 PM" src="https://github.com/user-attachments/assets/23e8b38e-637a-45cd-9ce0-b8a64747f99a" />
+
+This account can now be used to log into any domain-joined machine with administrative privileges. We will use this account to log into the client machine after it has been joined to the domain.
 
 <img width="1103" height="543" alt="Screenshot 2026-05-04 at 2 14 43 PM" src="https://github.com/user-attachments/assets/5a5cc17e-fa18-417a-af54-7f699caf529d" />
 
