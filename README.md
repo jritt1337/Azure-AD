@@ -52,7 +52,8 @@ Underneath **Administrator Account**, be sure to set a secure admin username and
 
 Navigate to the **Networking** tab and *ensure that the virtual network is set to the virtual network that was created in Step 1.*.
 
-<img width="804" height="689" alt="Screenshot 2026-04-28 at 8 55 27 PM" src="https://github.com/user-attachments/assets/4bf1abb0-2601-40e2-918e-5cbd4df08815" />
+<img width="804" height="689" alt="Screenshot 2026-04-28 at 8 59 07 PM" src="https://github.com/user-attachments/assets/0ad37629-8bf0-4820-b96f-804dc8112d19" />
+
 
 Once everything is in order, click **Review + Create**.
 
