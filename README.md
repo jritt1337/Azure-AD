@@ -120,7 +120,7 @@ On the installation type screen, leave **Role-based or feature-based installatio
 
 On the **Server Selection** screen, ensure your Domain Controller is selected, then click **Next**.
 
-<img width="819" height="572" alt="Screenshot 2026-05-12 at 5 52 44 PM" src="https://github.com/user-attachments/assets/615f83aa-09a9-4dd7-baa1-cb08e0fafa0f" />
+<img width="784" height="560" alt="Screenshot 2026-05-13 at 12 20 39 AM" src="https://github.com/user-attachments/assets/37fc3c9b-43f6-4319-b4ec-a891b0b6bb7b" />
 
 
 On the **Server Roles** screen, check **Active Directory Domain Services**.
