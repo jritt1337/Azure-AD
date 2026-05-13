@@ -105,50 +105,9 @@ Once the Domain Controller is added to your Devices menu, you can double-click i
 
 <img width="1442" height="652" alt="Screenshot 2026-04-28 at 9 33 38 PM" src="https://github.com/user-attachments/assets/115a945b-24f0-4888-a989-4e6027a63ecb" />
 
-Once connected, you should now be logged into the Windows Server desktop for the Domain Controller. Before we install and configure Active Directory, we need to ensure that other machines on the network can properly communicate with this server. For a simple lab setup, one option is to disable Windows Firewall. Right-click the Start Menu and select **Run**.
+Once connected, you should now be logged into the Windows Server desktop for the Domain Controller. 
 
-<img width="209" height="618" alt="Screenshot 2026-05-11 at 2 37 45 PM" src="https://github.com/user-attachments/assets/a0b010d2-c913-4b05-ae15-b06589081976" />
-
-Run **wf.msc** to bring up the Windows Firewall menu.
-
-<img width="418" height="236" alt="Screenshot 2026-05-11 at 2 38 07 PM" src="https://github.com/user-attachments/assets/eabd67f3-f633-4540-bb35-f172619241c8" />
-
-Click **Windows Defender Firewall Properties**. 
-
-<img width="1045" height="525" alt="Screenshot 2026-05-11 at 2 40 13 PM" src="https://github.com/user-attachments/assets/219c6a1f-109e-44fd-8a32-a73bac14895d" />
-
-Then under **the Domain, Public, and Private Profile tabs** change **Firewall State** to **"Off"**. 
-
-<img width="404" height="455" alt="Screenshot 2026-05-11 at 2 41 27 PM" src="https://github.com/user-attachments/assets/78fd11ae-37d6-4bbf-83ff-1188a180ff9f" />
-
-In a production environment, firewall rules should be configured instead of disabling the firewall entirely. The next step covers a more secure approach.
-
-### Step 4: Windows Firewall Configuration
-As an alternative to disabling Windows Firewall in the previous step, we can configure the required inbound rules to allow domain and network communication. This is a more secure approach that better reflects how firewalls are handled in real-world environments.
-
-Ensure the firewall is enabled for all profiles (Domain, Private, and Public). Then, in the Windows Firewall menu, click **Inbound Rules**.
-
-<img width="1108" height="731" alt="Screenshot 2026-05-04 at 12 41 20 PM" src="https://github.com/user-attachments/assets/022e2483-e768-49c5-b711-a57eccd1ac16" />
-
-You will now see a long list of firewall rules.
-
-<img width="1132" height="783" alt="Screenshot 2026-05-11 at 2 51 05 PM" src="https://github.com/user-attachments/assets/fea36073-e4c3-41e6-910a-5c0468193773" />
-
-From here, ensure the following inbound rule groups and rules are enabled. Some of these rules may already be enabled depending on Windows Server configuration. These rules are:
-
-* Active Directory Domain Services (rule group)
-* DNS Server (UDP-In and TCP-In)
-* File and Printer Sharing (Echo Request - ICMPv4-In)
-* Kerberos Key Distribution Center (TCP/UDP-In)
-* Remote Desktop (TCP-In)
-
-To enable a rule, right-click it and select **Enable Rule**.
-
-<img width="557" height="258" alt="Screenshot 2026-05-11 at 2 50 38 PM" src="https://github.com/user-attachments/assets/793e419c-b951-4cf0-8a79-9c3ac4f218d8" />
-
-In a production environment, these rules would further be restricted to trusted network ranges rather than be left open to all sources.
-
-### Step 5: Installing Active Directory on the Domain Controller
+### Step 4: Installing Active Directory on the Domain Controller
 On the Domain Controller, open up the Server Manager. It should be opened by default, but if not, you can find it within the Start Menu.
 
 In the Server Manager, click **"Add Roles and Features"**.
@@ -187,7 +146,43 @@ Under the Deployment Configuration step, you can add the DC to an existing domai
 
 In the next step, you will be required to set the DSRM password. **Be sure to set it to something secure.**. 
 
-After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required.
+After that, just click through and install. After Active Directory installation and the setup of the Domain Controller, a reboot will be required. Now we will configure the Windows Firewall.
+
+### Step 5: Windows Firewall Configuration
+Before moving forward, we are going to check the Windows Firewall and ensure the proper inbound rules are allowed so that clients can communicate with the Domain Controller. 
+
+Right-click the Start Menu and select **Run**.
+
+<img width="209" height="618" alt="Screenshot 2026-05-11 at 2 37 45 PM" src="https://github.com/user-attachments/assets/a0b010d2-c913-4b05-ae15-b06589081976" />
+
+Run **wf.msc** to bring up the Windows Firewall menu.
+
+<img width="418" height="236" alt="Screenshot 2026-05-11 at 2 38 07 PM" src="https://github.com/user-attachments/assets/eabd67f3-f633-4540-bb35-f172619241c8" />
+
+Ensure the firewall is enabled for all profiles (Domain, Private, and Public).
+
+Then, in the Windows Firewall menu, click **Inbound Rules**.
+
+<img width="1108" height="731" alt="Screenshot 2026-05-04 at 12 41 20 PM" src="https://github.com/user-attachments/assets/022e2483-e768-49c5-b711-a57eccd1ac16" />
+
+You will now see a long list of firewall rules.
+
+<img width="1132" height="783" alt="Screenshot 2026-05-11 at 2 51 05 PM" src="https://github.com/user-attachments/assets/fea36073-e4c3-41e6-910a-5c0468193773" />
+
+From here, ensure the following inbound rule groups and rules are enabled. Some of these rules may already be enabled depending on Windows Server configuration:
+
+* Active Directory Domain Services (rule group)
+* DNS Server (UDP-In and TCP-In)
+* File and Printer Sharing (Echo Request - ICMPv4-In)
+* Kerberos Key Distribution Center (TCP/UDP-In)
+* Remote Desktop (TCP-In)
+
+To enable a rule, right-click it and select **Enable Rule**.
+
+<img width="557" height="258" alt="Screenshot 2026-05-11 at 2 50 38 PM" src="https://github.com/user-attachments/assets/793e419c-b951-4cf0-8a79-9c3ac4f218d8" />
+
+In a production environment, these rules would typically be restricted to trusted network ranges rather than be left open to all sources.
+
 
 ### Step 6: Adding and Managing Users in Active Directory
 
