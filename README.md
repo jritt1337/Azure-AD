@@ -318,29 +318,68 @@ Now we're going to complete a simple task to show how to do some basic Group Pol
 
 Open the Active Directory Users and Computers utility, find and right-click the Employees OU, select **New > Group**. Name the group however you wish. For the purposes of this lab, I used "Remote Users". Make sure that the group scope is **Global** and the group type is **Security**.
 
-<img width="739" height="494" alt="Screenshot 2026-05-05 at 8 39 08 PM" src="https://github.com/user-attachments/assets/79e5c10e-c547-4f71-b37b-615c7f731503" />
+<img width="864" height="560" alt="Screenshot 2026-05-13 at 8 08 05 PM" src="https://github.com/user-attachments/assets/c51c3da8-5d74-4bcd-ac2b-52c983b0da5d" />
 
-After creating the group, double-click it and add the employee users under the **Members** tab.
 
-Now we will need to manage the permissions for the client machine. Open **Group Policy Management**, find the Workstations OU, right click and **Create a GPO in this domain, and Link it here...**. Name it something like "Remote Access". Right click the policy and select **Edit**. Afterwards, navigate to **Computer Configuration > Windows Settings > Security Settings > Restricted Groups**. Right-click and select **Add Group**. 
+After creating the group, double-click it and add the employees you wish to grant remote access to under the **Members** tab.
 
-<img width="1131" height="696" alt="Screenshot 2026-05-05 at 9 07 53 PM" src="https://github.com/user-attachments/assets/e64e334a-45bd-4533-aa68-13ef0044eb5f" />
+<img width="1260" height="610" alt="Screenshot 2026-05-13 at 8 13 53 PM" src="https://github.com/user-attachments/assets/497b7a51-e235-4a6b-a6d2-d05e83e9d55d" />
 
-When the Add Group window appears, click **Browse**, enter **Remote Desktop Users** and click OK.
 
-<img width="597" height="462" alt="Screenshot 2026-05-05 at 9 11 10 PM" src="https://github.com/user-attachments/assets/db0add00-40d7-4c76-a4fc-60e80b83c406" />
+Now we will need to manage the permissions for the client machine. 
 
-Afterwards, double-click the group, and when the Properties windows appears, add the **"Remote Users" (or whatever you named the group)** group. This should allow any users in the Remote Users group to log on to the client remotely.
+Open **Group Policy Management** by searching for it in the **Start** menu or running **gpmc.msc** from the **Run** menu.
+
+<img width="1260" height="762" alt="Screenshot 2026-05-13 at 8 34 28 PM" src="https://github.com/user-attachments/assets/9ced33e8-cefe-40b3-bba7-864622aba6cb" />
+
+
+Find the Workstations OU, right click and **Create a GPO in this domain, and Link it here...**. Name it something like "Remote Access".
+
+<img width="765" height="536" alt="Screenshot 2026-05-13 at 8 36 38 PM" src="https://github.com/user-attachments/assets/37bce429-7e3f-429d-9150-d1ac5bb99bea" />
+
+Now find the new policy under your domain. Right click the policy and select **Edit**.
+
+<img width="765" height="536" alt="Screenshot 2026-05-13 at 8 38 43 PM" src="https://github.com/user-attachments/assets/b114fc18-bdfe-4335-866a-4e817c8f2355" />
+
+Afterwards, navigate to **Computer Configuration > Policies > Windows Settings > Security Settings.** Right click **Restricted Groups** and select **Add Group**. 
+
+<img width="609" height="688" alt="Screenshot 2026-05-13 at 8 42 41 PM" src="https://github.com/user-attachments/assets/1229bbab-4093-4171-989d-29e8c9e4c545" />
+
+When the Add Group window appears, click **Browse**.
+
+<img width="609" height="329" alt="Screenshot 2026-05-13 at 8 45 58 PM" src="https://github.com/user-attachments/assets/1a0b511e-01ae-44f1-9507-c844734a8206" />
+
+Enter **Remote Desktop Users** and click OK, then OK again to save.
+
+<img width="609" height="329" alt="Screenshot 2026-05-13 at 8 46 12 PM" src="https://github.com/user-attachments/assets/53aa7169-4057-4ec2-9438-611e54752aad" />
+
+Afterwards, double-click the group, and when the Properties window appears, click **Add**.
+
+Type in **"Remote Users"** (or whatever you named the group), then **OK**, and then **Apply.**
+
+<img width="368" height="523" alt="Screenshot 2026-05-13 at 8 53 06 PM" src="https://github.com/user-attachments/assets/a303848c-2502-4dbb-9455-61210cb22ae4" />
+
+This policy will allow any users in the Remote Users group to log on to the client remotely.
 
 **NOTE: Restricted Groups can replace the membership of the targeted local group. In production, administrators should carefully test this before applying it broadly.**
 
-Now, on the client while logged on as an administrator, open PowerShell and run "**gpupdate /force**".
+Now, log into the client as an Administrator. Then, open **PowerShell** as an administrator.
 
-<img width="1114" height="627" alt="Screenshot 2026-05-05 at 9 39 39 PM" src="https://github.com/user-attachments/assets/606df195-3c64-4840-9280-f2c88c1c56f3" />
+<img width="903" height="793" alt="Screenshot 2026-05-13 at 8 59 21 PM" src="https://github.com/user-attachments/assets/3e5f1c44-0a0c-4042-b2ee-1c1cb6828b5a" />
+
+
+In PowerShell, run "**gpupdate /force**".
+
+<img width="983" height="523" alt="Screenshot 2026-05-13 at 9 00 57 PM" src="https://github.com/user-attachments/assets/7a070f61-6ee0-4dfe-a92b-5879ff79039d" />
 
 You can verify the applied Group Policy settings by running **gpresult /r** in PowerShell or Command Prompt.
 
-After the Group Policy is updated, you must restart the client. Afterwards, any of the Employees within the Remote Users group should be able to log on to the client.
+Look for the **Remote Access** policy under Applied Group Policy Objects.
+
+<img width="1171" height="787" alt="Screenshot 2026-05-13 at 9 01 54 PM" src="https://github.com/user-attachments/assets/2b16a157-3b55-48cd-958d-72e37fd5b897" />
+
+
+After the Group Policy is updated, restart the client machine. Afterwards, any of the Employees within the Remote Users group should be able to log on to the client.
 
 
 <img width="1114" height="589" alt="Screenshot 2026-05-05 at 9 33 15 PM" src="https://github.com/user-attachments/assets/be907a1b-0cd0-4ecc-b191-1133452ad9b5" />
