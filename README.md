@@ -306,7 +306,15 @@ After the restart, log in with the domain admin account created earlier. **The f
 Finally, we'll cover some group policy basics.
 If you have not already done so, create a few employee accounts within the Employees Organizational Unit. 
 
-Also, create a **Workstations** OU and drag the client machine from the **Computers** container to this new OU. Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
+Now, return to **Active Directory Users and Computers** and create a **Workstations** Organizational Unit.
+
+<img width="784" height="560" alt="Screenshot 2026-05-13 at 7 55 54 PM" src="https://github.com/user-attachments/assets/798855fe-706b-49e0-a4e6-617b5f64e7c6" />
+
+Drag the client machine from the **Computers** container to this new OU. 
+
+<img width="784" height="560" alt="Screenshot 2026-05-13 at 7 59 05 PM" src="https://github.com/user-attachments/assets/7c513ce0-7d67-41e4-b186-eadc03576248" />
+
+Now we're going to complete a simple task to show how to do some basic Group Policy management. Firstly, we're going to need to allow our Employees to be able to connect to the client remotely.
 
 Open the Active Directory Users and Computers utility, find and right-click the Employees OU, select **New > Group**. Name the group however you wish. For the purposes of this lab, I used "Remote Users". Make sure that the group scope is **Global** and the group type is **Security**.
 
